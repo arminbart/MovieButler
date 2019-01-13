@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="MovieButler">
+	<property environment="env"/>
+	<property name="debuglevel" value="source,lines,vars"/>
+	<property name="target" value="1.8"/>
+	<property name="source" value="1.8"/>
+
+	<property name="app.name"    value="MovieButler"/>
+	<property name="src.dir"     value="src"/>
+	<property name="build.dir"   value="build"/>
+	<property name="dist.dir"    value="dist"/>
+	<property name="classes.dir" value="${build.dir}/classes"/>
+	<property name="javadoc.dir" value="${build.dir}/doc"/>
+
+	<path id="MovieButler.classpath">
+		<pathelement location="${build.dir}"/>
+	</path>
+
+	<target name="prepare">
+		<mkdir dir="${build.dir}"/>
+		<copy includeemptydirs="false" todir="${build.dir}">
+			<fileset dir="${src.dir}">
+				<exclude name="**/*.launch"/>
+				<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+		<delete dir="${dist.dir}"/>
+	</target>
+
+	<target name="compile" depends="prepare">
+		<javac debug="true" debuglevel="${debuglevel}" destdir="${build.dir}" includeantruntime="false" source="${source}" target="${target}">
+			<src path="${src.dir}"/>
+			<classpath refid="MovieButler.classpath"/>
+		</javac>
+	</target>
+
+	<target name="run" depends="compile">
+		<java classname="de.bartmail.moviebutler.main.Main" failonerror="true" fork="yes">
+			<classpath refid="MovieButler.classpath"/>
+		</java>
+	</target>
+
+	<target name="dist" depends="compile">
+		<mkdir dir="${dist.dir}"/>
+		<jar destfile="${dist.dir}/${app.name}.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="main.Main"/>
+				<attribute name="Class-Path" value="."/>
+			</manifest>
+			<fileset dir="${build.dir}"/>
+		</jar>
+	</target>
+</project>
