@@ -7,11 +7,7 @@ public class Main
 	public static void main(String[] args)
 	{
 		if (args.length == 0)
-		{
-			System.out.println("No command parameter provied.");
-			System.out.println("Commands: add (add new video file to MovieBib)");
-			System.exit(1);
-		}
+			help();
 
 		try
 		{
@@ -19,6 +15,14 @@ public class Main
 			{
 				case "add":
 					AddVideo.addVideo(args);
+					break;
+
+				case "bulkadd":
+					AddVideo.bulkAddVideos(args);
+					break;
+
+				default:
+					help();
 			}
 
 			System.exit(0);
@@ -34,5 +38,15 @@ public class Main
 			e.printStackTrace();
 			System.exit(3);
 		}
+	}
+
+	private static void help()
+	{
+		System.out.println("No command parameter provied.");
+		System.out.println("Commands: add LANG FILENAME");
+		System.out.println("               (add new video file to MovieBib)");
+		System.out.println("          bulkadd LANG PATHNAME");
+		System.out.println("               (search a folder and add all found video files; subfolders included)");
+		System.exit(1);
 	}
 }
